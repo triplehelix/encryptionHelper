@@ -1,19 +1,15 @@
 package com.mikehedden;
 
+import com.mikehedden.util.Cli;
+
 import java.io.File;
 
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-    }
-
-    private static String readStringFromFile(File file){
-        //TODO
-        return null;
-    }
-
-    private static void writeStringToFile(File file, String string){
-        //TODO
+        if (null != args){
+            new Cli(args).parse();
+        }
     }
 }

@@ -13,27 +13,13 @@ import org.slf4j.LoggerFactory;
 public abstract class encryptionUtilBase implements encryptionUtil {
     Logger LOGGER = LoggerFactory.getLogger(encryptionUtilBase.class);
     @Override
-    public String encrypt(String plainText, String key) {
-        String cipher;
-        try{
-            cipher = Base64.encodeBase64String(doCrypto(Cipher.ENCRYPT_MODE, key, plainText.getBytes()));
-        }catch (CryptoException e){
-            LOGGER.error("Encryption failed!", e);
-            return null;
-        }
-        return cipher;
+    public String encrypt(String plainText, String key) throws CryptoException {
+        return Base64.encodeBase64String(doCrypto(Cipher.ENCRYPT_MODE, key, plainText.getBytes()));
     }
 
     @Override
-    public String decrypt(String cypher, String key) {
-        String plainText;
-        try{
-            plainText =  new String(doCrypto(Cipher.DECRYPT_MODE, key, Base64.decodeBase64(cypher.getBytes())));
-        }catch (CryptoException e){
-            LOGGER.error("Decryption failed! ", e);
-            return null;
-        }
-        return plainText;
+    public String decrypt(String cypher, String key) throws CryptoException {
+        return new String(doCrypto(Cipher.DECRYPT_MODE, key, Base64.decodeBase64(cypher.getBytes())));
     }
 
     protected abstract byte[] doCrypto(int cipherMode, String key, byte[] input) throws CryptoException;

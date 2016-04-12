@@ -1,5 +1,6 @@
 package com.mikehedden.util;
 
+import com.mikehedden.exceptions.CryptoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +32,25 @@ public class encryptionUtilAESImplTest {
         String key = "7D3C7926D3EF71D9";
         String plainText = "This is a cipher test";
         LOGGER.info("Original PlainText=" + plainText);
-        String cipher = instance.encrypt(plainText,key);
+        String cipher = null;
+        try {
+            cipher = instance.encrypt(plainText, key);
+        }catch (CryptoException e){
+            LOGGER.error("CryptoException occurred while encrypting:", e);
+            fail("CryptoException occurred when it shouldn't have.");
+        }
         LOGGER.info("Cipher=" + cipher);
 
         assertNotNull(cipher);
         assertNotEquals("Testing plainText not equal to plainText after encryption", plainText, cipher);
 
-        String newPlainText = instance.decrypt(cipher,key);
+        String newPlainText = null;
+        try{
+            newPlainText = instance.decrypt(cipher,key);
+        }catch (CryptoException e){
+            LOGGER.error("CryptoException occurred while decrypting:", e);
+            fail("CryptoException occurred when it shouldn't have.");
+        }
         LOGGER.info("New PlainText=" + newPlainText);
 
         assertNotNull(newPlainText);
