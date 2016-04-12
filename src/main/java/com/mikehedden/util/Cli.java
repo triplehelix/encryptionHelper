@@ -1,7 +1,6 @@
 package com.mikehedden.util;
 
 import com.mikehedden.exceptions.CryptoException;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,7 @@ import java.io.IOException;
 
 /**
  * Created by MHEDDEN on 2016-04-12.
+ * This Handles the CLI for the application.
  */
 public class Cli {
     private static final Logger LOGGER = LoggerFactory.getLogger(Cli.class);
@@ -31,12 +31,13 @@ public class Cli {
 
     public void parse(){
         CommandLineParser parser = new BasicParser();
-        CommandLine cmd = null;
+        CommandLine cmd;
         try{
             cmd = parser.parse(options, args);
             if (cmd.hasOption("h")){
                 printHelpString();
             }else{
+                LOGGER.info("Processing, please wait...");
                 String filename = cmd.getOptionValue("f");
                 String key = cmd.getOptionValue("k");
                 String keyfilename = cmd.getOptionValue("y");
@@ -46,43 +47,41 @@ public class Cli {
                     printHelpString();
                 }else{
                     // Do work
-                    FileEncryptor encryptor = null;
-                    File file = new File(filename);
+                    FileEncryptor encryptor;
+                    File keyFile = null;
+                    //create encryptor based on
                     if (null == key){
-                        File keyFile = new File(keyfilename);
+                        keyFile = new File(keyfilename);
                         try {
-                            encryptor = new FileEncryptor(keyFile, file);
+                            key = FileEncryptor.getKeyFromFile(keyFile);
                         }catch (IOException e){
                             LOGGER.error("IO exception occurred while opening key file.", e);
                             return;
                         }
-                    }else{
-                        encryptor = new FileEncryptor(key, file);
                     }
+
+                    // key and filename collected, check mode
                     if (mode.toLowerCase().equals("encrypt")){
                         try{
-                            encryptor.encryptFile();
+                            FileEncryptor.encryptFile(key, filename);
+                            LOGGER.info("File: " + filename + " has been successfully encrypted.");
                         } catch (IOException e){
                             LOGGER.error("IOException occurred while encrypting file", e);
-                            return;
                         } catch (CryptoException e){
                             LOGGER.error("CryptoException occurred while encryption file", e);
-                            return;
                         }
                     }else if (mode.toLowerCase().equals("decrypt")) {
                         try{
-                            encryptor.decryptFile();
+                            FileEncryptor.decryptFile(key, filename);
+                            LOGGER.info("File: " + filename + " has been successfully decrypted.");
                         } catch (IOException e){
                             LOGGER.error("IOException occurred while decrypting file", e);
-                            return;
                         } catch (CryptoException e){
                             LOGGER.error("CryptoException occurred while decryption file", e);
-                            return;
                         }
                     }else{
                         LOGGER.error("Invalid parameter provided for mode. Must be 'encrypt' or 'decrypt'");
                         printHelpString();
-                        return;
                     }
                 }
             }

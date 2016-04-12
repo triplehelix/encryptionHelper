@@ -10,14 +10,20 @@ public class FileHelper {
     public static String readStringFromFile(File file) throws IOException{
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
+        FileReader fr = null;
+        try{
+            fr = new FileReader(file);
+        }catch (NullPointerException e) {
+            throw new IOException("Inputted File returned a NPE. Filename: " + ((null != file) ? file.getAbsolutePath(): null));
+        }
         try {
-            br = new BufferedReader(new FileReader(file));
+            br = new BufferedReader(fr);
             String currentLine;
             while (null != (currentLine = br.readLine())) {
                 sb.append(currentLine);
                 sb.append("\n");
             }
-        }catch (IOException e){
+        }catch (IOException e) {
             throw new IOException(e);
         }finally {
             if (null != br){

@@ -11,36 +11,29 @@ import java.io.IOException;
  * Created by MHEDDEN on 2016-04-12.
  */
 public class FileEncryptor {
-    Logger LOGGER = LoggerFactory.getLogger(FileEncryptor.class);
-    private File targetFile;
-    private String key;
-
     // TODO refactor with locking
 
-    public FileEncryptor(String key, File targetFile){
-        this.key = key;
-        this.targetFile = targetFile;
-    }
-
-    public FileEncryptor(File keyfile, File targetFile) throws IOException{
-        new FileEncryptor(getKeyFromFile(keyfile), targetFile);
-    }
-
-    public void encryptFile() throws CryptoException, IOException{
-        String input = FileHelper.readStringFromFile(targetFile);
+    public static void encryptFile(String key, String targetFilename) throws CryptoException, IOException{
+        if (null == key || null == targetFilename){
+            throw new IOException("Parameters for encryptFile() cannot be null");
+        }
+        String input = FileHelper.readStringFromFile(new File(targetFilename));
         encryptionUtil util = new encryptionUtilAESImpl();
         String encryptedString = util.encrypt(input, key);
-        FileHelper.writeStringToFile(targetFile, encryptedString);
+        FileHelper.writeStringToFile(new File(targetFilename), encryptedString);
     }
 
-    public void decryptFile() throws CryptoException, IOException{
-        String input = FileHelper.readStringFromFile(targetFile);
+    public static void decryptFile(String key, String targetFilename) throws CryptoException, IOException{
+        if (null == key || null == targetFilename){
+            throw new IOException("Parameters for decryptFile() cannot be null");
+        }
+        String input = FileHelper.readStringFromFile(new File(targetFilename));
         encryptionUtil util = new encryptionUtilAESImpl();
         String encryptedString = util.decrypt(input, key);
-        FileHelper.writeStringToFile(targetFile, encryptedString);
+        FileHelper.writeStringToFile(new File(targetFilename), encryptedString);
     }
 
-    private String getKeyFromFile(File keyfile) throws IOException {
+    public static String getKeyFromFile(File keyfile) throws IOException {
         return FileHelper.readStringFromFile(keyfile);
     }
 
