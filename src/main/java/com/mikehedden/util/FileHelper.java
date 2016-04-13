@@ -8,17 +8,15 @@ import java.io.*;
  */
 class FileHelper {
 
-    static String readStringFromFile(File file) throws IOException{
+    private static String readStringFromFile(File file) throws IOException{
         StringBuilder sb = new StringBuilder();
-        BufferedReader br = null;
-        FileReader fr = null;
+        FileReader fr;
         try{
             fr = new FileReader(file);
         }catch (NullPointerException e) {
             throw new IOException("Inputted File returned a NPE. Filename: " + ((null != file) ? file.getAbsolutePath(): null));
         }
-        try {
-            br = new BufferedReader(fr);
+        try  (BufferedReader br = new BufferedReader(fr)){
             String currentLine;
             while (null != (currentLine = br.readLine())) {
                 sb.append(currentLine);
@@ -26,10 +24,6 @@ class FileHelper {
             }
         }catch (IOException e) {
             throw new IOException(e);
-        }finally {
-            if (null != br){
-                br.close();
-            }
         }
         return sb.toString();
     }
@@ -39,9 +33,11 @@ class FileHelper {
         return readStringFromFile(file);
     }
 
-    static void writeStringToFile(File file, String string) throws IOException{
+    private static void writeStringToFile(File file, String string) throws IOException{
         if(!file.exists()){
-            file.createNewFile();
+           if (!file.createNewFile()){
+               throw new IOException("Error creating file to write to.");
+           }
         }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile()))) {
             bw.write(string);

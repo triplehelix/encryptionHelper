@@ -4,8 +4,6 @@ import com.mikehedden.exceptions.CryptoException;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 
@@ -48,12 +46,9 @@ public class Cli {
                     printHelpString();
                 }else{
                     // Do work
-                    File keyFile;
-                    //create encryptor based on
                     if (null == key){
-                        keyFile = new File(keyfilename);
                         try {
-                            key = FileEncryptor.getKeyFromFile(keyFile);
+                            key = FileEncryptor.getKeyFromFile(keyfilename);
                         }catch (IOException e){
                             LOGGER.error("IO exception occurred while opening key file.", e);
                             return;

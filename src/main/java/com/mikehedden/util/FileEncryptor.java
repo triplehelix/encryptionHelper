@@ -1,7 +1,6 @@
 package com.mikehedden.util;
 
 import com.mikehedden.exceptions.CryptoException;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -31,7 +30,7 @@ class FileEncryptor {
         FileHelper.writeStringToFile(targetFilename, encryptedString);
     }
 
-    static String getKeyFromFile(File keyfile) throws IOException {
+    static String getKeyFromFile(String keyfile) throws IOException {
         return FileHelper.readStringFromFile(keyfile);
     }
 
