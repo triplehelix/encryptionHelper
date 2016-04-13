@@ -1,39 +1,37 @@
 package com.mikehedden.util;
 
 import com.mikehedden.exceptions.CryptoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 
 /**
  * Created by MHEDDEN on 2016-04-12.
+ * This is a class that provides static methods to encrypt or decrypt files. As well as retrieve a key from a file.
  */
-public class FileEncryptor {
+class FileEncryptor {
     // TODO refactor with locking
 
-    public static void encryptFile(String key, String targetFilename) throws CryptoException, IOException{
+    static void encryptFile(String key, String targetFilename) throws CryptoException, IOException{
         if (null == key || null == targetFilename){
             throw new IOException("Parameters for encryptFile() cannot be null");
         }
-        String input = FileHelper.readStringFromFile(new File(targetFilename));
+        String input = FileHelper.readStringFromFile(targetFilename);
         encryptionUtil util = new encryptionUtilAESImpl();
         String encryptedString = util.encrypt(input, key);
-        FileHelper.writeStringToFile(new File(targetFilename), encryptedString);
+        FileHelper.writeStringToFile(targetFilename, encryptedString);
     }
 
-    public static void decryptFile(String key, String targetFilename) throws CryptoException, IOException{
+    static void decryptFile(String key, String targetFilename) throws CryptoException, IOException{
         if (null == key || null == targetFilename){
             throw new IOException("Parameters for decryptFile() cannot be null");
         }
-        String input = FileHelper.readStringFromFile(new File(targetFilename));
+        String input = FileHelper.readStringFromFile(targetFilename);
         encryptionUtil util = new encryptionUtilAESImpl();
         String encryptedString = util.decrypt(input, key);
-        FileHelper.writeStringToFile(new File(targetFilename), encryptedString);
+        FileHelper.writeStringToFile(targetFilename, encryptedString);
     }
 
-    public static String getKeyFromFile(File keyfile) throws IOException {
+    static String getKeyFromFile(File keyfile) throws IOException {
         return FileHelper.readStringFromFile(keyfile);
     }
 

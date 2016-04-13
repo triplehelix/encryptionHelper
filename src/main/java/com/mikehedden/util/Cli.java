@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.commons.cli.ParseException;
 
 /**
  * Created by MHEDDEN on 2016-04-12.
@@ -47,8 +48,7 @@ public class Cli {
                     printHelpString();
                 }else{
                     // Do work
-                    FileEncryptor encryptor;
-                    File keyFile = null;
+                    File keyFile;
                     //create encryptor based on
                     if (null == key){
                         keyFile = new File(keyfilename);

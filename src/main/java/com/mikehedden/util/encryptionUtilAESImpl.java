@@ -18,8 +18,9 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by mikeh on 4/10/2016.
+ * This class provides the AES implementation of doCrypto for the encryptionUtils interface
  */
-public class encryptionUtilAESImpl extends encryptionUtilBase {
+class encryptionUtilAESImpl extends encryptionUtilBase {
     private static final String ALGORITHM = "AES";
     private static final String TRANSFORMATION = "AES/CBC/PKCS5Padding";
 

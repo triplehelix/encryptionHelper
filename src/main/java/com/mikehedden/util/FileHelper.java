@@ -4,10 +4,11 @@ import java.io.*;
 
 /**
  * Created by MHEDDEN on 2016-04-12.
+ * Helper class to read a string from a file or write a string to a file.
  */
-public class FileHelper {
+class FileHelper {
 
-    public static String readStringFromFile(File file) throws IOException{
+    static String readStringFromFile(File file) throws IOException{
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
         FileReader fr = null;
@@ -33,27 +34,23 @@ public class FileHelper {
         return sb.toString();
     }
 
-    public static String readStringFromFile(String filename) throws IOException{
+    static String readStringFromFile(String filename) throws IOException{
         File file = new File(filename);
         return readStringFromFile(file);
     }
 
-    public static void writeStringToFile(File file, String string) throws IOException{
+    static void writeStringToFile(File file, String string) throws IOException{
         if(!file.exists()){
             file.createNewFile();
         }
-        BufferedWriter bw = null;
-        try{
-            bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile()))) {
             bw.write(string);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new IOException(e);
-        }finally{
-            bw.close();
         }
     }
 
-    public static void writeStringToFile(String filename, String string) throws IOException{
+    static void writeStringToFile(String filename, String string) throws IOException{
         File file = new File(filename);
         writeStringToFile(file, string);
     }

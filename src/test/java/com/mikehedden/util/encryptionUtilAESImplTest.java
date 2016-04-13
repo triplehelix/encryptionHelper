@@ -8,10 +8,11 @@ import static org.junit.Assert.*;
 
 /**
  * Created by mikeh on 4/10/2016.
+ * This is the Junit test for encryptionUtilAESImpl
  */
 public class encryptionUtilAESImplTest {
-    Logger LOGGER = LoggerFactory.getLogger(encryptionUtilAESImplTest.class);
-    encryptionUtil instance;
+    private Logger LOGGER = LoggerFactory.getLogger(encryptionUtilAESImplTest.class);
+    private encryptionUtil instance;
 
     @org.junit.Before
     public void setUp() throws Exception {
